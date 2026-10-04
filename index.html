@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kreativität – Spuren hinterlassen</title>
+<meta name="description" content="Eine Seite über Kreativität: was sie ist, wie sie entsteht und wie man sie trainiert.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✏️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #E8EDF4;
+    --ink: #1A1F4A;
+    --muted: #5C6488;
+    --blue: #2E3BEA;
+    --yellow: #F9C80E;
+    --line: #C5CDE0;
+    --display: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+    --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #12163A;
+      --ink: #E8EDF4;
+      --muted: #A3AACB;
+      --blue: #7C86FF;
+      --yellow: #F9C80E;
+      --line: #2C3266;
+    }
+  }
+  *, *::before, *::after { box-sizing: inherit; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 1.125rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--yellow); outline-offset: 3px; }
+
+  /* ---------- Hero mit Zeichenfläche ---------- */
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-content: end;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    overflow: hidden;
+    touch-action: none;
+  }
+  #canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+  }
+  .hero-content { position: relative; pointer-events: none; max-width: 70rem; }
+  .hero h1 {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(3.2rem, 11vw, 10rem);
+    line-height: 0.88;
+    letter-spacing: -0.04em;
+    margin: 0 0 1.5rem;
+  }
+  .hero p {
+    max-width: 34ch;
+    margin: 0 0 1.5rem;
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+    color: var(--muted);
+  }
+  .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; pointer-events: auto; }
+  button, .btn {
+    font-family: var(--display);
+    font-size: 1rem;
+    font-weight: 600;
+    border: 2px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  button:hover, .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--ink); border-color: var(--ink); }
+
+  /* ---------- Inhalt ---------- */
+  main { padding: 0 clamp(1.25rem, 4vw, 3rem); }
+  section {
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: clamp(4rem, 10vw, 8rem) 0;
+    border-top: 1px solid var(--line);
+  }
+  h2 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    margin: 0 0 2rem;
+    max-width: 18ch;
+  }
+  h3 {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 1.4rem;
+    letter-spacing: -0.01em;
+    margin: 0 0 0.5rem;
+  }
+  .prose { max-width: 62ch; }
+  .prose p { margin: 0 0 1.25rem; }
+  .lead { font-size: clamp(1.3rem, 2.4vw, 1.65rem); line-height: 1.45; }
+
+  /* Prozess: echte Abfolge, daher nummeriert */
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 2.5rem 2rem;
+    counter-reset: step;
+  }
+  .steps li { counter-increment: step; position: relative; padding-top: 4.5rem; }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-family: var(--display);
+    font-weight: 300;
+    font-size: 4rem;
+    line-height: 1;
+    color: var(--blue);
+  }
+  .steps p { margin: 0; color: var(--muted); }
+
+  /* Mythen */
+  .myths { display: grid; gap: 0; margin: 0; }
+  .myth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .myth dt { font-family: var(--display); font-size: 1.3rem; font-weight: 500; text-decoration: line-through; text-decoration-color: var(--blue); text-decoration-thickness: 2px; color: var(--muted); }
+  .myth dd { margin: 0; }
+  @media (max-width: 40rem) { .myth { grid-template-columns: 1fr; gap: 0.5rem; } }
+
+  /* Impulsgenerator */
+  .prompt-box {
+    background: var(--blue);
+    color: #fff;
+    border-radius: 2rem;
+    padding: clamp(2rem, 6vw, 4rem);
+    display: grid;
+    gap: 2rem;
+  }
+  .prompt-box h2 { color: #fff; margin-bottom: 0; }
+  #prompt {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    max-width: 24ch;
+    min-height: 3.5em;
+    margin: 0;
+  }
+  .prompt-box button { border-color: #fff; color: #fff; justify-self: start; }
+  .prompt-box button:hover { background: var(--yellow); border-color: var(--yellow); color: #1A1F4A; }
+
+  .habits { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 2.5rem 2rem; }
+  .habits p { margin: 0; color: var(--muted); }
+
+  footer {
+    max-width: 70rem;
+    margin: 0 auto;
+    padding: 3rem clamp(1.25rem, 4vw, 3rem) 4rem;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <canvas id="canvas" aria-label="Zeichenfläche: Mit Maus oder Finger zeichnen"></canvas>
+  <div class="hero-content">
+    <h1>Kreativität beginnt mit einer Spur.</h1>
+    <p>Zieh mit der Maus oder dem Finger über diese Fläche. Schon hast du etwas gemacht, das es vorher nicht gab.</p>
+    <div class="hero-actions">
+      <button type="button" id="clear">Fläche leeren</button>
+      <a class="btn btn-primary" href="#was">Weiterlesen</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section id="was">
+    <h2>Was ist Kreativität eigentlich?</h2>
+    <div class="prose">
+      <p class="lead">Kreativität ist die Fähigkeit, etwas Neues zu schaffen, das auch einen Nutzen oder eine Bedeutung hat.</p>
+      <p>Neu allein reicht nicht – ein zufälliger Haufen Buchstaben ist neu, aber selten wertvoll. Erst wenn eine Idee überrascht <em>und</em> funktioniert, sprechen wir von Kreativität.</p>
+      <p>Das gilt für ein Gemälde genauso wie für eine elegante Codezeile, ein neues Rezept oder eine bessere Art, den Wochenplan zu organisieren.</p>
+    </div>
+  </section>
+
+  <section id="prozess">
+    <h2>So entsteht eine Idee</h2>
+    <ol class="steps">
+      <li>
+        <h3>Vorbereitung</h3>
+        <p>Du sammelst Wissen, Material und Fragen. Je mehr Bausteine im Kopf, desto mehr Kombinationen sind möglich.</p>
+      </li>
+      <li>
+        <h3>Inkubation</h3>
+        <p>Du lässt das Problem liegen. Beim Spazieren, Duschen oder Schlafen arbeitet das Gehirn im Hintergrund weiter.</p>
+      </li>
+      <li>
+        <h3>Einsicht</h3>
+        <p>Plötzlich passt etwas zusammen. Der berühmte Aha-Moment ist meist das Ergebnis der ersten beiden Phasen.</p>
+      </li>
+      <li>
+        <h3>Überprüfung</h3>
+        <p>Du testest die Idee, verwirfst Teile und verbesserst sie. Hier wird aus einem Einfall ein Ergebnis.</p>
+      </li>
+    </ol>
+  </section>
+
+  <section id="mythen">
+    <h2>Drei Irrtümer über Kreativität</h2>
+    <dl class="myths">
+      <div class="myth">
+        <dt>Man ist kreativ oder eben nicht.</dt>
+        <dd>Kreativität ist eine Fähigkeit wie Laufen oder Programmieren. Sie wächst mit Übung.</dd>
+      </div>
+      <div class="myth">
+        <dt>Gute Ideen kommen aus dem Nichts.</dt>
+        <dd>Neue Ideen sind fast immer Kombinationen aus Bekanntem – nur auf eine unerwartete Weise verbunden.</dd>
+      </div>
+      <div class="myth">
+        <dt>Grenzen töten Kreativität.</dt>
+        <dd>Das Gegenteil stimmt oft: Wenig Zeit, wenig Material oder klare Regeln zwingen zu ungewöhnlichen Lösungen.</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section id="impuls">
+    <div class="prompt-box">
+      <h2>Brauchst du einen Anstoss?</h2>
+      <p id="prompt" aria-live="polite">Zeichne dein Frühstück aus der Sicht einer Ameise.</p>
+      <button type="button" id="next">Neuen Impuls zeigen</button>
+    </div>
+  </section>
+
+  <section id="gewohnheiten">
+    <h2>Kleine Gewohnheiten, grosse Wirkung</h2>
+    <div class="habits">
+      <div>
+        <h3>Ideen sofort notieren</h3>
+        <p>Ein Notizbuch oder eine Notiz-App, immer griffbereit. Was nicht aufgeschrieben wird, ist meist nach zehn Minuten weg.</p>
+      </div>
+      <div>
+        <h3>Erst Menge, dann Qualität</h3>
+        <p>Schreib zwanzig schlechte Ideen auf. Unter den letzten fünf ist oft die beste – die offensichtlichen sind dann schon aus dem Weg.</p>
+      </div>
+      <div>
+        <h3>Fremde Gebiete erkunden</h3>
+        <p>Lies, schau und hör Dinge ausserhalb deines Fachs. Die überraschendsten Verbindungen entstehen zwischen weit entfernten Themen.</p>
+      </div>
+      <div>
+        <h3>Langeweile zulassen</h3>
+        <p>Nicht jede Pause mit dem Handy füllen. Leerlauf ist der Moment, in dem das Gehirn eigene Wege geht.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Erstellt mit HTML, CSS und etwas JavaScript. Jede Zeichnung oben ist ein Unikat – und verschwindet beim Neuladen.</p>
+</footer>
+
+<script>
+  /* ---------- Zeichenfläche ---------- */
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let drawing = false, last = null;
+
+  function strokeColor() {
+    return getComputedStyle(document.documentElement).getPropertyValue('--blue').trim() || '#2E3BEA';
+  }
+
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    const rect = canvas.getBoundingClientRect();
+    const old = document.createElement('canvas');
+    old.width = canvas.width; old.height = canvas.height;
+    if (canvas.width) old.getContext('2d').drawImage(canvas, 0, 0);
+    canvas.width = rect.width * dpr;
+    canvas.height = rect.height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    if (old.width) ctx.drawImage(old, 0, 0, old.width / dpr, old.height / dpr);
+  }
+
+  function pos(e) {
+    const r = canvas.getBoundingClientRect();
+    return { x: e.clientX - r.left, y: e.clientY - r.top, t: performance.now() };
+  }
+
+  function segment(a, b) {
+    const dist = Math.hypot(b.x - a.x, b.y - a.y);
+    const speed = dist / Math.max(b.t - a.t, 1);
+    ctx.strokeStyle = strokeColor();
+    ctx.lineWidth = Math.max(2, 14 - speed * 4);
+    ctx.beginPath();
+    ctx.moveTo(a.x, a.y);
+    ctx.lineTo(b.x, b.y);
+    ctx.stroke();
+  }
+
+  canvas.addEventListener('pointerdown', e => { drawing = true; last = pos(e); canvas.setPointerCapture(e.pointerId); });
+  canvas.addEventListener('pointermove', e => { if (!drawing) return; const p = pos(e); segment(last, p); last = p; });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => canvas.addEventListener(t, () => { drawing = false; }));
+
+  document.getElementById('clear').addEventListener('click', () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  });
+
+  window.addEventListener('resize', resize);
+  resize();
+
+  /* Einmaliger Auftakt: eine Linie zeichnet sich selbst */
+  if (!reduceMotion) {
+    const w = canvas.getBoundingClientRect().width;
+    const h = canvas.getBoundingClientRect().height;
+    const pts = [];
+    for (let i = 0; i <= 140; i++) {
+      const t = i / 140;
+      pts.push({
+        x: w * (0.55 + 0.38 * t),
+        y: h * (0.25 + 0.12 * Math.sin(t * Math.PI * 3)) + 40 * Math.sin(t * 17),
+        t: i * 16
+      });
+    }
+    let i = 1;
+    (function step() {
+      if (i >= pts.length) return;
+      segment(pts[i - 1], pts[i]);
+      i++;
+      requestAnimationFrame(step);
+    })();
+  }
+
+  /* ---------- Impulsgenerator ---------- */
+  const prompts = [
+    'Zeichne dein Frühstück aus der Sicht einer Ameise.',
+    'Erfinde ein Werkzeug, das es noch nicht gibt – und gib ihm einen Namen.',
+    'Beschreibe deinen Schulweg in genau sechs Wörtern.',
+    'Fotografiere heute fünf Dinge, die rund sind.',
+    'Schreib eine Geschichte, die mit dem Satz „Das war nicht geplant." endet.',
+    'Baue eine Mini-Website mit nur einer Farbe.',
+    'Kombiniere zwei Hobbys zu einem neuen.',
+    'Zeichne ein Gesicht nur aus geometrischen Formen.',
+    'Erkläre etwas Kompliziertes so, dass es ein Kind versteht.',
+    'Mach aus einem Fehler von heute eine Idee für morgen.',
+    'Gestalte ein Plakat für ein Konzert, das es nie geben wird.',
+    'Finde drei neue Verwendungen für eine leere Flasche.'
+  ];
+  let current = 0;
+  document.getElementById('next').addEventListener('click', () => {
+    let n;
+    do { n = Math.floor(Math.random() * prompts.length); } while (n === current);
+    current = n;
+    document.getElementById('prompt').textContent = prompts[n];
+  });
+</script>
+</body>
+</html>
